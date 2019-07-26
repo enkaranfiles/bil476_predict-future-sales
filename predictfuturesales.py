@@ -127,7 +127,7 @@ matrix['type_code'] = matrix['type_code'].astype(np.int8)
 matrix['subtype_code'] = matrix['subtype_code'].astype(np.int8)
 
 
-
+#------> mean encoding <-------
 shop_mean = matrix.groupby(['shop_id']).agg({'item_cnt_month': ['mean']})
 shop_mean.columns = ['shop_mean']
 shop_mean.reset_index(inplace=True)
@@ -142,13 +142,14 @@ matrix = pd.merge(matrix, shop_mean, on=['shop_id'], how='left')
 matrix = pd.merge(matrix, shop_item_mean, on=['item_id','shop_id'], how='left')
 matrix = pd.merge(matrix, group, on=['date_block_num','item_id'], how='left')
 matrix['date_item_avg_item_cnt'] = matrix['date_item_avg_item_cnt'].astype(np.float16)
+#last three month average
 matrix = lag_feature(matrix, [1,2,3], 'date_item_avg_item_cnt')
 matrix.drop(['date_item_avg_item_cnt'], axis=1, inplace=True)
 matrix = lag_feature(matrix, [1,2,3], 'item_cnt_month')
 
 matrix_last = matrix[matrix.date_block_num > 2]
 
-
+# turn nan to zeros
 def fill_na(df):
     for col in df.columns:
         if ('_lag_' in col) & (df[col].isnull().any()):
@@ -189,10 +190,14 @@ sns.heatmap(corr, mask=mask, cmap=cmap, vmax=.3, center=0,
 del data
 gc.collect()
 
+
+
+
 # =============================================================================
 # the lines where we make our predictions
 # =============================================================================
 if lightGBM_try:
+    #model parameters
     model = lgb.LGBMRegressor(
         n_estimators=200,
         learning_rate=0.03,
