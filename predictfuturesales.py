@@ -23,7 +23,7 @@ def lag_feature(df, lags, col):
     tmp = df[['date_block_num', 'shop_id', 'item_id', col]]
     for i in lags:
         shifted = tmp.copy()
-        shifted.columns = ['date_block_num', 'shop_id', 'item_id', col + '_lag_' + str(i)]
+        shifted.columns = ['date_block_num', 'shop_id', 'item_id', col + 'lag' + str(i)]
         shifted['date_block_num'] += i
         df = pd.merge(df, shifted, on=['date_block_num', 'shop_id', 'item_id'], how='left')
     return df
@@ -78,3 +78,49 @@ matrix['date_block_num'] = matrix['date_block_num'].astype(np.int8)
 matrix['shop_id'] = matrix['shop_id'].astype(np.int8)
 matrix['item_id'] = matrix['item_id'].astype(np.int16)
 matrix.sort_values(cols, inplace=True)
+
+
+
+train['revenue'] = train['item_price'] *  train['item_cnt_day']
+
+item_price_lag = train.groupby(['date_block_num','item_id']).agg({'item_price':['mean']})
+item_price_lag.columns = ['average_item_price']
+item_price_by_shop_lag = train.groupby(['date_block_num','shop_id', 'item_id']).agg({'item_price':['mean']})
+item_price_by_shop_lag.columns = ['average_item_price_by_shop']
+group = train.groupby(['date_block_num','shop_id','item_id']).agg({'item_cnt_day': ['sum']})
+group.columns = ['item_cnt_month']
+group.reset_index(inplace=True)
+
+matrix = pd.merge(matrix, group, on=cols, how='left')
+matrix['item_cnt_month'] = (matrix['item_cnt_month'].fillna(0).clip(0,20).astype(np.float16))
+
+
+
+test['date_block_num'] = 34
+test['date_block_num'] = test['date_block_num'].astype(np.int8)
+test['shop_id'] = test['shop_id'].astype(np.int8)
+test['item_id'] = test['item_id'].astype(np.int16)
+
+
+matrix = pd.concat([matrix, test], ignore_index=True, sort=False, keys=cols)
+matrix.fillna(0, inplace=True) # 34 month
+
+matrix = pd.merge(matrix, item_price_lag, on=['date_block_num','item_id'], how='left')
+matrix['average_item_price'] = matrix['average_item_price'].astype(np.float16)
+matrix = lag_feature(matrix, [1,2,3], 'average_item_price')
+matrix.drop(['average_item_price'], axis=1, inplace=True)
+matrix = pd.merge(matrix, item_price_by_shop_lag, on=['date_block_num','shop_id','item_id'], how='left')
+matrix['average_item_price_by_shop'] = matrix['average_item_price_by_shop'].astype(np.float16)
+matrix = lag_feature(matrix, [1,2,3], 'average_item_price_by_shop')
+matrix.drop(['average_item_price_by_shop'], axis=1, inplace=True)
+
+
+
+matrix = pd.merge(matrix, shops, on=['shop_id'], how='left')
+matrix = pd.merge(matrix, items, on=['item_id'], how='left')
+matrix = pd.merge(matrix, cats, on=['item_category_id'], how='left')
+matrix['city_code'] = matrix['city_code'].astype(np.int8)
+matrix['shop_type'] = matrix['shop_type'].astype(np.int8)
+matrix['item_category_id'] = matrix['item_category_id'].astype(np.int8)
+matrix['type_code'] = matrix['type_code'].astype(np.int8)
+matrix['subtype_code'] = matrix['subtype_code'].astype(np.int8)
