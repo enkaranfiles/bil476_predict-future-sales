@@ -15,12 +15,12 @@ We are asked to predict total sales for every product and store in the next mont
 - Also, we are going to use some libraries for estimating future sales. For example, TenseorFlow, Keras, scikit-learn and some other effective libraries. 
 
 
-### Installing
+### Install and Run
 
-## Install python 3.7 from following link 
+#### Install python 3.7 from following link 
 ```https://www.python.org/downloads/```
 
-## After install python, needed libraries:
+#### After install python, needed libraries:
 
 1) pip
 2) numpy
@@ -31,7 +31,7 @@ We are asked to predict total sales for every product and store in the next mont
 7) lightgbm
 8) xgboost
 
-# Then install them in this order:
+##### Then install them in this order:
 
 1) To install pip follow the instructions given in the following website 
 ```https://www.liquidweb.com/kb/install-pip-windows/```
@@ -46,20 +46,20 @@ Open cmd or terminal and write the following commands in this order
 7) pip install lightgbm
 8) pip install xgboost
 
-## Download repository with one of two options:
+#### Download repository with one of two options:
 
 1)following command or from repository 
-	git clone ```https://github.com/enkaranfiles/predict-future-sales.git```
+	```git clone https://github.com/enkaranfiles/predict-future-sales.git```
 
 2)open the following link and click the "Clone or download" after download extract zip file
-	https://github.com/enkaranfiles/predict-future-sales.git
+	```https://github.com/enkaranfiles/predict-future-sales.git```
 
-## After downloading repository, extract dataset.zip using "Extract here" and see dataset file is extracted in current directory
+##### After downloading repository, extract dataset.zip using "Extract here" and see dataset file is extracted in current directory
 
-## For preprocessing:
+#### For preprocessing:
 - Run preprocess.py this will create a traintest dataset under dataset folder
 
-## For the prediction with models:
+#### For the prediction with models:
 - Run one of the python files named by "mXGBoost.py", "mDecisionTree.py", "mRandomForest.py", "mlightGBM.py"
 - Running models returns a csv which is name same as python filename under outputdata folder
 
