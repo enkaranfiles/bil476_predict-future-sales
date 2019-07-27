@@ -36,8 +36,10 @@ model.fit(
     verbose=True, 
     early_stopping_rounds = 2)
 
+Y_test = model.predict(X_test).clip(0, 20)
+
 submission = pd.DataFrame({
     "ID": test.index, 
     "item_cnt_month": Y_test
 })
-submission.to_csv(r'outputdata\XGBoost.csv', index=False)
+submission.to_csv(r'outputdata/XGBoost.csv', index=False)

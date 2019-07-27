@@ -38,4 +38,4 @@ submission = pd.DataFrame({
     "ID": test.index, 
     "item_cnt_month": Y_test
 })
-submission.to_csv(r'outputdata\LGBm.csv', index=False)
+submission.to_csv(r'outputdata/LGBm.csv', index=False)
