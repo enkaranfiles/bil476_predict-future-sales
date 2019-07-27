@@ -37,12 +37,15 @@ cats = pd.read_csv(r'item_categories.csv')
 train = pd.read_csv(r'sales_train.csv')
 test  = pd.read_csv(r'test.csv').set_index('ID')
 
+# delete outliers due to outlier graphs
 train = train[train.item_price<100000]
 train = train[train.item_cnt_day<1001]
 
+# if item price < 0 fill them with median.
 median = train[(train.shop_id==32)&(train.item_id==2973)&(train.date_block_num==4)&(train.item_price>0)].item_price.median()
 train.loc[train.item_price<0, 'item_price'] = median
 
+# merged the shops with the same but different id.
 train.loc[train.shop_id == 0, 'shop_id'] = 57
 test.loc[test.shop_id == 0, 'shop_id'] = 57
 train.loc[train.shop_id == 1, 'shop_id'] = 58
@@ -50,7 +53,7 @@ test.loc[test.shop_id == 1, 'shop_id'] = 58
 train.loc[train.shop_id == 10, 'shop_id'] = 11
 test.loc[test.shop_id == 10, 'shop_id'] = 11
 
-
+# splitted shop name, and created new features from it.
 shops['shop_name'] = shops['shop_name'].apply(lambda x: x.lower()).str.replace('[^\w\s]', '').str.replace('\d+','').str.strip()
 shops['city'] = shops['shop_name'].str.partition(' ')[0]
 shops['city_code'] = LabelEncoder().fit_transform(shops['city'])
@@ -58,7 +61,7 @@ shops['shop_type'] = shops['shop_name'].apply(lambda x: 'мтрц' if 'мтрц'
 shops['shop_type'] = LabelEncoder().fit_transform(shops['shop_type'])
 shops = shops[['shop_id','city_code','shop_type']]
 
-
+#After extracting features for an easier understanding changed type and subtype with number using label encoding.
 cats['split'] = cats['item_category_name'].str.split('-')
 cats['type'] = cats['split'].map(lambda x: x[0].strip())
 cats['type_code'] = LabelEncoder().fit_transform(cats['type'])
