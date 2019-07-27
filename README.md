@@ -17,11 +17,53 @@ We are asked to predict total sales for every product and store in the next mont
 
 ### Installing
 
-Firstly, you can run following command and install the repository,
+## Install python 3.7 from following link 
+```https://www.python.org/downloads/```
 
-```
-git clone https://github.com/enkaranfiles/predict-future-sales.git
-```
+## After install python, needed libraries:
+
+1) pip
+2) numpy
+3) pandas
+4) scikit-learn
+5) seaborn
+6) matplotlib
+7) lightgbm
+8) xgboost
+
+# Then install them in this order:
+
+1) To install pip follow the instructions given in the following website 
+```https://www.liquidweb.com/kb/install-pip-windows/```
+
+Open cmd or terminal and write the following commands in this order
+
+2) pip install numpy
+3) pip install pandas
+4) pip install -U scikit-learn
+5) pip install seaborn
+6) pip install matplotlib
+7) pip install lightgbm
+8) pip install xgboost
+
+## Download repository with one of two options:
+
+1)following command or from repository 
+	git clone ```https://github.com/enkaranfiles/predict-future-sales.git```
+
+2)open the following link and click the "Clone or download" after download extract zip file
+	https://github.com/enkaranfiles/predict-future-sales.git
+
+## After downloading repository, extract dataset.zip using "Extract here" and see dataset file is extracted in current directory
+
+## For preprocessing:
+- Run preprocess.py this will create a traintest dataset under dataset folder
+
+## For the prediction with models:
+- Run one of the python files named by "mXGBoost.py", "mDecisionTree.py", "mRandomForest.py", "mlightGBM.py"
+- Running models returns a csv which is name same as python filename under outputdata folder
+
+
 
 ## Authors
 
