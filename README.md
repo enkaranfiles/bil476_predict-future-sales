@@ -1,6 +1,7 @@
 # Predict Future Sales
 
 In this competition we will work with a challenging time-series dataset consisting of daily sales data, kindly provided by one of the largest Russian software firms - 1C Company. 
+Competition link: ```https://www.kaggle.com/c/competitive-data-science-predict-future-sales```
 
 ## Getting Started
 
